@@ -24,12 +24,16 @@ def _scrape_url(url: str, words: list[str]) -> dict[str, list[str]]:
     response = requests.get(url)
     response.raise_for_status()
 
+    # Some sites misreport their encoding. Using apparent_encoding helps avoid
+    # mojibake characters in the scraped text.
+    response.encoding = response.apparent_encoding or "utf-8"
     soup = BeautifulSoup(response.text, "html.parser")
     paragraphs = [p.get_text() for p in soup.find_all("p")]
 
     results: dict[str, list[str]] = {}
     for word in words:
-        pattern = re.compile(rf"({re.escape(word)})", re.IGNORECASE)
+        # Use word boundaries to avoid matching substrings inside other words.
+        pattern = re.compile(rf"\b{re.escape(word)}\b", re.IGNORECASE)
         matches = []
         for text in paragraphs:
             if pattern.search(text):
