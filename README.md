@@ -1,2 +1,15 @@
 # PageTextScraper
-Talks as input a URL and a list of words to search for in that URL. If any word is found, it returns the containing paragraph, with the matching word in all caps.
+
+This tool fetches web pages and searches their paragraphs for given words.
+Multiple URLs and words may be supplied. Results are written to a JSON file and
+can optionally be exported as a Markdown document.
+
+## Usage
+
+```bash
+python main.py --urls URL1 URL2 --words word1 word2 \
+    --json-output results.json --markdown-output results.md
+```
+
+The generated JSON maps each URL to the words that were found and the matching
+paragraphs.
