@@ -85,7 +85,10 @@ def main() -> None:
         all_results[url] = _scrape_url(url, args.words)
 
     json_path = Path(args.json_output)
-    json_path.write_text(json.dumps(all_results, indent=2, ensure_ascii=False))
+    json_path.write_text(
+        json.dumps(all_results, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
     if args.markdown_output:
         _write_markdown(all_results, Path(args.markdown_output))
